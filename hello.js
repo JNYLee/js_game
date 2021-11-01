@@ -28,3 +28,29 @@ switch (value){
         console.log('C');
         break;
 }
+
+let i = 1;
+while(i <= 100) {
+    console.log("Hello, While!");
+    i++;
+}
+
+for (let i = 0; i <=99; i++){
+    console.log(i+1);
+}
+
+let i =0;
+while (true) {
+    if(i===5) break;
+        i++;
+}
+console.log(i);
+
+let i = 0;
+while (i < 10) {
+    i++;
+    if(i % 2 === 0) { //짝수는 건너뛰기
+        continue;
+    }
+    console.log(i);
+}

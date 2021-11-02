@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿵쿵따 게임!</title>
+
+</head>
+<body>
+    <div>참가자 <span id = "player_num">1</span>번</div>
+    <div>이전 단어 <span id = "pre_word"></span></div>
+    <input type="text">
+    <button>입력</button>
+
+    <script>
+        const input_playerNum = parseInt(prompt("참가할 플레이어의 인원 수를 입력하세요", "숫자만 입력"));
+        const $player_num = document.querySelector('#player_num');
+        const $pre_word = document.querySelector('#pre_word');
+        const $input_word = document.querySelector('input');
+        const $button_click = document.querySelector('button');
+
+    let word;
+    let newWord;
+    if (!input_playerNum){
+        const when_button_click = () => {
+            if( (!word || word[word.length-1] === newWord[0]) && newWord.length === 3) { //처음 이전 단어가 비어있는지 확인하고, 단어의 긑과 시작이 맞는지 확인 하고, 단어의 길이는 3글자 맞는지 확인
+                word = newWord;
+                $pre_word.textContent = word;
+                $input_word.value = '';
+                const change_playerNum = Number($player_num.textContent);
+                if(change_playerNum < input_playerNum) $player_num.textContent = change_playerNum + 1;
+                else{
+                    $player_num.textContent = 1;
+                }
+                }else { //끝과 시작이 다를 경우
+                    alert("값이 맞지 않습니다. 다시 입력해 주십시오.");      //경고
+            }
+            //입력값삭제
+            $input_word.value ='';
+            $input_word.focus();
+        };
+        const when_input_word = (event) => {
+            newWord = event.target.value;
+        };
+
+        $button_click.addEventListener('click',when_button_click);
+        $input_word.addEventListener('input', when_input_word);
+    }
+    </script>
+</body>
+</html>

@@ -21,7 +21,7 @@
 </head>
 <body>
 <div id ="result">추첨 결과는? </div>
-<div id ="Bonus">보너스: </div>
+<div id ="bonus">보너스: </div>
 <script>
     const candidate = Array(45).fill().map((v, i) => i+1);
     const shuffle = [];
@@ -36,14 +36,41 @@
     const winBalls = shuffle.slice(0,6).sort((a,b) => a-b); //sort는 원본을 수정하므로 slice를  중간에 넣어서 원본을 바꾸지 않고 복사본을 가져온다.
     const bonus = shuffle[6]; //보너스 공만 따로 분리.
     console.log(winBalls, bonus); //추첨한 볼과 보너스를 분리하여서 출력.
-
+    
     const $result = document.querySelector('#result');
-    setTimeout(() => {
-        const $ball = document.createTextNode('div');
+    const $bonus = document.querySelector('#bonus');
+    
+    function colorize(number, $tag) {
+        if (number < 10) {
+          $tag.style.backgroundColor = 'red';
+          $tag.style.color = 'white';
+        } else if (number < 20) {
+            $tag.style.backgroundColor = 'orange';
+        } else if (number < 30) {
+           $tag.style.backgroundColor = 'yellow';
+        } else if (number < 40) {
+            $tag.style.backgroundColor = 'blue';
+            $tag.style.color = 'white';
+        } else {
+            $tag.style.backgroundColor = 'green';
+            $tag.style.color = 'white';
+        }
+    }
+    const showBall = (winBall_index, $target) => {
+        const $ball = document.createElement('div');
         $ball.className = 'ball';
-        $ball.textContent = winBalls[0];
-        $result.appendChild($ball);
-    }, 1000);
+        colorize(winBall_index, $ball);
+        $ball.textContent = winBall_index;
+        $target.appendChild($ball);
+    };
+    for(let winBall_index_count = 0; winBall_index_count < 6; winBall_index_count++){
+        setTimeout(() => {
+            showBall(winBalls[winBall_index_count], $result);
+        }, 1000 * (winBall_index_count + 1));
+    }
+    setTimeout(() => {
+        showBall(bonus, $bonus);
+    }, 7000);
 </script>
 </body>
 </html>

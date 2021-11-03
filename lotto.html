@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또추첨기</title>
+  <style>
+    .ball {
+      display: inline-block;
+      border: 1px solid black;
+      border-radius: 20px;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 20px;
+      text-align: center;
+      margin-right: 20px;
+    }
+  </style>
+</head>
+<body>
+<div id ="result">추첨 결과는? </div>
+<div id ="Bonus">보너스: </div>
+<script>
+    const candidate = Array(45).fill().map((v, i) => i+1);
+    const shuffle = [];
+    while(candidate.length > 0){
+        const random = Math.floor(Math.random() * candidate.length);
+        const spliceArray = candidate.splice(random, 1);
+        const value = spliceArray[0];
+        shuffle.push(value); 
+        //shuffle.push(spliceArray[0]);
+    }
+    console.log(shuffle); //[Test]용 45개의 숫자를 무작위로 담은 shuffle 배열 출력
+    const winBalls = shuffle.slice(0,6).sort((a,b) => a-b); //sort는 원본을 수정하므로 slice를  중간에 넣어서 원본을 바꾸지 않고 복사본을 가져온다.
+    const bonus = shuffle[6]; //보너스 공만 따로 분리.
+    console.log(winBalls, bonus); //추첨한 볼과 보너스를 분리하여서 출력.
+
+    const $result = document.querySelector('#result');
+    setTimeout(() => {
+        const $ball = document.createTextNode('div');
+        $ball.className = 'ball';
+        $ball.textContent = winBalls[0];
+        $result.appendChild($ball);
+    }, 1000);
+</script>
+</body>
+</html>

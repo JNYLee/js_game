@@ -10,9 +10,9 @@
 </form> <!--form 태그 종료-->
 <div id="logs"></div>
 <script>
-  const $input = document.querySelector('#input'); //아이디사 input인 태그를 찾아 $input에 저장
-  const $form = document.querySelector('#form'); //아이디사 input인 태그를 찾아 $input에 저장
-  const $logs = document.querySelector('#logs'); //아이디사 input인 태그를 찾아 $input에 저장
+  const $input = document.querySelector('#input'); //아이디가 input인 태그를 찾아 $input에 저장
+  const $form = document.querySelector('#form'); //아이디가 input인 태그를 찾아 $input에 저장
+  const $logs = document.querySelector('#logs'); //아이디가 input인 태그를 찾아 $input에 저장
 
   const numbers = []; // [1, 2, 3, 4, 5, 6, 7, 8, 9]
   for (let n = 0; n < 9; n += 1) {
@@ -21,59 +21,59 @@
   const answer = []; // [3, 1, 4, 6]
   for (let n = 0; n < 4; n += 1) { // 네 번 반복
     const index = Math.floor(Math.random() * numbers.length); // 0~8 정수 
-    answer.push(numbers[index]);
-    numbers.splice(index, 1);
+    answer.push(numbers[index]); //numbers 배열 안의 index번호의 숫자를 answer배열에 넣는다  
+    numbers.splice(index, 1); //numbers 배열의 index번호의 숫자를 지운다
   }
-  console.log(answer);
+  console.log(answer); // [TEST]용: 콘솔에 정답표시
 
-  const tries = [];
-  function checkInput(input) { // 3146,   314,  3144
+  const tries = []; //시도한 값을 넣는 배열
+  function checkInput(input) { // 3146,   314,  3144 //입력된 숫자를 숫자야구게임 조건에 부합하는 지 검사하는 함수
     if (input.length !== 4) { // 길이는 4가 아닌가
       return alert('4자리 숫자를 입력해 주세요.');
     }
-    if (new Set(input).size !== 4) { // 중복된 숫자가 있는가
+    if (new Set(input).size !== 4) { // 중복된 숫자가 있는가 //모르겠음??
       return alert('중복되지 않게 입력해 주세요.');
     }
     if (tries.includes(input)) { // 이미 시도한 값은 아닌가
       return alert('이미 시도한 값입니다.');
     }
     return true;
-  } // 검사하는 코드
+  } // 검사하는 코드 종료
 
   $form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const value = $input.value;
-    $input.value = '';
-    if (!checkInput(value)) {
-      return;
-    }
+    const value = $input.value; //value에 input Tag 안에 들어있는 값을 넣는다.
+    $input.value = ''; //input tag안에 값을 지운다.
+    if (!checkInput(value)) { //value 값을 checkInput 함수안에서 검사하고
+      return; //문제있으면 addEventListener함수를 종료 시켜버림.
+    }//숫자검사완료함수 종료
     // 입력값 문제없음
-    if (answer.join('') === value) { // [3, 1, 4, 6] -> '3146'
-      $logs.textContent = '홈런!';
-      return;
-    }
-    if (tries.length >= 9) {
-      const message = document.createTextNode(`패배! 정답은 ${answer.join('')}`);
-      $logs.appendChild(message);
-      return;
-    }
+    if (answer.join('') === value) { // [3, 1, 4, 6] -> '3146' //답과 입력값을 비교한다.
+      $logs.textContent = '홈런!'; //맞으면 로그칸에 홈런!을 출력한다.
+      return; //게임이 끝났으므로 addEventListener함수를 종료 시켜버림.
+    }// 홈런확인함수 종료
+    if (tries.length >= 9) { //시도를 9번이상했을 때
+      const message = document.createTextNode(`패배! 정답은 ${answer.join('')}`); //패배와 정답을 출력한다.
+      $logs.appendChild(message); //문자열을 받지 못하므로 message에 저장시켜서 대입시킴.
+      return; //게임이 끝났으므로 addEventListener함수를 종료 시켜버림.
+    } // 시도횟수확인함수 종료
     // 몇 스트라이크 몇 볼인지 검사
     let strike = 0;
     let ball = 0;
     // answer: 3146,  value: 1347
-    for (let i = 0; i < answer.length; i++) {
-      const index = value.indexOf(answer[i]);
-      if (index > -1) { // 일치하는 숫자 발견
-        if (index === i) { // 자릿수도 같음
-          strike += 1;
-        } else { // 숫자만 같음
-          ball += 1; 
-        }
-      }
-    }
-    $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼`, document.createElement('br'));
-    tries.push(value);
-  });
+    answer.forEach((element, i) => { //반복문 길이(숫자야구게임 자릿수)만큼 반복한다.
+          const index = value.indexOf(element); //사용자의 입력값에서 정답의 숫자에 위치를 파악한다.
+          if (index > -1) { // 일치하는 숫자 발견
+            if (index === i) { // 파악한 위치와 배열의 index의 자릿수도 같음
+              strike += 1; //스트라이크 +1
+            } else { // 숫자만 같음
+              ball += 1; //볼 +1
+            }
+          }//정답과 사용자숫자 매치하는 함수(단일)종료
+    }); //정답과 사용자숫자 매치하는 함수(반복)종료
+    $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼`, document.createElement('br')); //사용자 입력값에 대한 힌트 출력
+    tries.push(value); //입력값 배열에 저장해놓기
+  }); //$form EventListener함수 종료
 </script>
 </body>
 </html>

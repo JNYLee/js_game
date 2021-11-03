@@ -4,15 +4,15 @@
   <title>숫자야구</title>
 </head>
 <body>
-<form id="form">
-  <input type="text" id="input">
-  <button>확인</button>
-</form>
+<form id="form"> <!--form이라는 태그와 아이디 생성-->
+  <input type="text" id="input"> <!--숫자야구게임을 진행할 input태그와 아이디 생성-->
+  <button>확인</button> <!--숫자입력후 누를 버튼 생성-->
+</form> <!--form 태그 종료-->
 <div id="logs"></div>
 <script>
-  const $input = document.querySelector('#input');
-  const $form = document.querySelector('#form');
-  const $logs = document.querySelector('#logs');
+  const $input = document.querySelector('#input'); //아이디사 input인 태그를 찾아 $input에 저장
+  const $form = document.querySelector('#form'); //아이디사 input인 태그를 찾아 $input에 저장
+  const $logs = document.querySelector('#logs'); //아이디사 input인 태그를 찾아 $input에 저장
 
   const numbers = []; // [1, 2, 3, 4, 5, 6, 7, 8, 9]
   for (let n = 0; n < 9; n += 1) {

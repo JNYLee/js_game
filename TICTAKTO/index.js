@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
   let turn = 'O';
   
   const checkWinner = (target) => {
+    if(!clickable) return;
     const rowIndex = target.parentNode.rowIndex;
     const cellIndex = target.cellIndex;
     // 세칸 다 채워졌나?
@@ -49,6 +50,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     // 승자가 있으면
     if (hasWinner) {
       $result.textContent = `${turn}님이 승리!`;
+      $table.removeEventListener('click', callback);
       return;
     }
     // 승자가 없으면

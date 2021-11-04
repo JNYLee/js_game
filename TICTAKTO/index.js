@@ -9,18 +9,9 @@ document.addEventListener("DOMContentLoaded", ()=> {
     let turn = 'O';
 
       const checkWinner = (target) => {
-        let rowIndex;
-        let cellIndex;
+        const rowIndex = target.parentNode.rowIndex;
+        const cellIndex = target.cellIndex;
         // 세 칸 다 채워졌나?
-        rows.forEach((row, ri) => {
-          row.forEach((cell, ci) => {
-            if(cell === target) {
-              rowIndex = ri;
-              cellIndex = ci;
-            }
-          });
-        });
-        console.log(rows);
         // 가로줄 검사
         let hasWinner = false;
         if (
@@ -71,14 +62,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
             return;
           }
           //무승부 검사 이 부분 헷갈림 row안에 뭘 저장하고 있는지
-          let draw = true;
-          rows.forEach((row) => {
-            row.forEach((cell) => {
-              if(!cell.textContent) {
-                draw = false;
-              }
-            });
-          });
+          const draw = rows.flat().every((cell) => cell.textContent);
+          
           if (draw) {
             $result.textContent = '무승부';
             return;

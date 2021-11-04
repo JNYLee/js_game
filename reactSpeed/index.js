@@ -2,12 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const $screen = document.querySelector('#screen');
     const $result = document.querySelector('#result');
 
+    let startTime;
+    let endTime;
+
     $screen.addEventListener('click', (event) => {
         if (event.target.classList.contains('waiting')) {
             $screen.classList.remove('waiting');
             $screen.classList.add('ready');
             $screen.textContent = '초록색이 되면 클릭하세요';
             setTimeout(function () {
+                startTime = new Date();
                 $screen.classList.remove('ready');
                 $screen.classList.add('now');
                 $screen.textContent = '지금 클릭하세요!';
@@ -17,8 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }else if (event.target.classList.contains('ready')) {
 
         }else if (event.target.classList.contains('now')) {
-            //끝 시간 재기
-            //시간 저장
+             endTime = new Date();
+             $result.textContent = `${endTime - startTime}ms`;
+             $screen.classList.remove('now');
+             $screen.classList.add('waiting');
+             $screen.textContent = '클릭하면 시작하세요';
+             // 끝 시간 재기
+            // 시간 저장
         }
     });
 });

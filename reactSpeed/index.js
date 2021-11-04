@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let startTime;
     let endTime;
 
+    const records = [];
+
     $screen.addEventListener('click', (event) => {
         if (event.target.classList.contains('waiting')) {
             $screen.classList.remove('waiting');
@@ -21,11 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }else if (event.target.classList.contains('ready')) {
 
         }else if (event.target.classList.contains('now')) {
-             endTime = new Date();
-             $result.textContent = `${endTime - startTime}ms`;
-             $screen.classList.remove('now');
-             $screen.classList.add('waiting');
-             $screen.textContent = '클릭하면 시작하세요';
+            endTime = new Date();
+            const current = endTime - startTime;
+            records.push(current);
+            const average = records.reduce((a,c) => a + c) / records.length;
+            $result.textContent = `현재 ${current}ms, 평균: ${average}ms`;
+            startTime = null;
+            endTime = null;
+            $screen.classList.remove('now');
+            $screen.classList.add('waiting');
+            $screen.textContent = '클릭하면 시작하세요';
              // 끝 시간 재기
             // 시간 저장
         }

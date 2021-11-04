@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let startTime;
     let endTime;
+    let timeOutId;
 
     const records = [];
 
@@ -12,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
             $screen.classList.remove('waiting');
             $screen.classList.add('ready');
             $screen.textContent = '초록색이 되면 클릭하세요';
-            setTimeout(function () {
+            timeOutId = setTimeout(function () {
                 startTime = new Date();
                 $screen.classList.remove('ready');
                 $screen.classList.add('now');
@@ -21,7 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             }, Math.floor(Math.random()*1000) + 2000); // 원하는 시간을 2~3초로 랜덤으로 설정
         }else if (event.target.classList.contains('ready')) {
-
+            clearTimeout(timeOutId);
+            $screen.classList.remove('ready');
+            $screen.classList.add('waiting');
+            $screen.textContent = '너무 빨리 눌렀습니다!';
         }else if (event.target.classList.contains('now')) {
             endTime = new Date();
             const current = endTime - startTime;

@@ -8,11 +8,83 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const rows = [];
     let turn = 'O';
 
-    const callback = (event) => {
-      if (event.target.textContent) return;
-      event.target.textContent = turn;
-      turn = turn === 'O' ? 'X' : 'O';
-    };
+      const checkWinner = (target) => {
+        let rowIndex;
+        let cellIndex;
+        // 세 칸 다 채워졌나?
+        rows.forEach((row, ri) => {
+          row.forEach((cell, ci) => {
+            if(cell === target) {
+              rowIndex = ri;
+              cellIndex = ci;
+            }
+          });
+        });
+        console.log(rows);
+        // 가로줄 검사
+        let hasWinner = false;
+        if (
+          rows[rowIndex][0].textContent === turn &&
+          rows[rowIndex][1].textContent === turn &&
+          rows[rowIndex][2].textContent === turn
+        ) {
+          hasWinner = true;
+        }
+        // 세로줄 검사
+        if (
+          rows[0][cellIndex].textContent === turn &&
+          rows[1][cellIndex].textContent === turn &&
+          rows[2][cellIndex].textContent === turn
+        ) {
+          hasWinner = true;
+        }
+        // 대각선 검사
+        if (
+          rows[0][0].textContent === turn &&
+          rows[1][1].textContent === turn &&
+          rows[2][2].textContent === turn
+        ) {
+          hasWinner = true;
+        }
+        if (
+          rows[0][2].textContent === turn &&
+          rows[1][1].textContent === turn &&
+          rows[2][0].textContent === turn
+        ) {
+          hasWinner = true;
+        }
+        return hasWinner;
+        };
+
+        const callback = (event) => {
+          if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
+            console.log('빈칸이 아닙니다.');
+            return;
+          }
+          // 빈칸이면
+          console.log('빈칸입니다');
+          event.target.textContent = turn;
+          // 승부 판단하기
+          if (checkWinner(event.target)) {
+            $result.textContent = `${turn}님이 승리!`;
+            $table.removeEventListener('click', callback);
+            return;
+          }
+          //무승부 검사 이 부분 헷갈림 row안에 뭘 저장하고 있는지
+          let draw = true;
+          rows.forEach((row) => {
+            row.forEach((cell) => {
+              if(!cell.textContent) {
+                draw = false;
+              }
+            });
+          });
+          if (draw) {
+            $result.textContent = '무승부';
+            return;
+          }
+          turn = turn === 'X' ? 'O' : 'X';
+        };
 
     for(let make_horizon_blank = 0; make_horizon_blank < horizon_blank; make_horizon_blank++) {
       data.push([]);
@@ -25,6 +97,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         cells.push($td);
         $tr.append($td);
       }
+      rows.push(cells);
       $table.addEventListener('click', callback);
       $table.append($tr);
     }

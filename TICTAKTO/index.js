@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const rows = [];
     let turn = 'O';
 
+    const callback = (event) => {
+      if (event.target.textContent) return;
+      event.target.textContent = turn;
+      turn = turn === 'O' ? 'X' : 'O';
+    };
+
     for(let make_horizon_blank = 0; make_horizon_blank < horizon_blank; make_horizon_blank++) {
       data.push([]);
     }
@@ -17,15 +23,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
       for(let make_blank_td = 0; make_blank_td < horizon_blank; make_blank_td++) {
         const $td = document.createElement('td'); 
         cells.push($td);
-        $td.addEventListener('click', (event) => {
-          if (event.target.textContent) return;
-          event.target.textContent = turn;
-          if (turn === 'O') {
-            turn = 'X';
-          }else if (turn === 'X') {
-            turn = 'O';
-          }
-        });
+        $td.addEventListener('click', callback);
         $tr.append($td);
       }
       $table.append($tr);

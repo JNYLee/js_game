@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", ()=> {
       for(let make_blank_td = 0; make_blank_td < horizon_blank; make_blank_td++) {
         const $td = document.createElement('td'); 
         cells.push($td);
-        $td.addEventListener('click', callback);
         $tr.append($td);
       }
+      $table.addEventListener('click', callback);
       $table.append($tr);
     }
 

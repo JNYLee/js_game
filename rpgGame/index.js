@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
       $battleMenu.style.display = 'block';
       monster = JSON.parse(
         JSON.stringify(monsterList[Math.floor(Math.random() * monsterList.length)])
-      );
+      ); //깊은 복사
       monster.maxHp = monster.hp;
       $monsterName.textContent = monster.name;
       $monsterHp.textContent = `HP: ${monster.hp}/${monster.maxHp}`;

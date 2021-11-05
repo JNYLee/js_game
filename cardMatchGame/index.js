@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     cardInner.appendChild(cardBack);
     card.appendChild(cardInner);
     return card;
-
   }
 
   function onClickCard() {  //카드가 클릭했을 때 발생하는 함수? 모르겠다
@@ -43,9 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const firstBackColor = clicked[0].querySelector('.card-back').style.backgroundColor;
     const secondBackColor = clicked[1].querySelector('.card-back').style.backgroundColor;
     if (firstBackColor === secondBackColor) {
+      clickable = false;
       completed.push(clicked[0]);
       completed.push(clicked[1]);
       clicked = [];
+      clickable = true;
       if (completed.length !== total) {
         return;
       }

@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     attack(target) {
       target.hp -= this.att;
     }
-  }
+  } // 부모 클래스 함수 종료
 
   class Hero extends Unit {
     constructor(game, name) {

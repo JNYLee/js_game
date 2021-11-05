@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     start(name) {
       console.log(this);
-      $gameMenu.addEventListener('submit', this.onGameMenuInput);
+      $gameMenu.addEventListener('submit', this.onGameMenuInput); // addEventLister안에 들어가면 this에 위치가 $gameMenu로 들어간다.
       $battleMenu.addEventListener('submit', this.onBattleMenuInput);
       this.changeScreen('game');
       this.hero = new Hero(this, name);
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         $battleMenu.style.display = 'block';
       }
     }
-    onGameMenuInput = (event) => {
+    onGameMenuInput = (event) => { // $gameMenu로 들어간 this가 화살표함수 특성으로 바깥으로 튀어나와 다시 Game함수를 받는다. 
       event.preventDefault();
       const input = event.target['menu-input'].value;
       if (input === '1') { // 모험

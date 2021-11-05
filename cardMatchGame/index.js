@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let shuffled = [];
   let clicked = [];
   let completed = [];
+  let clickable = false;
 
   function shuffle() { // 색깔들을 무작위로 섞어주는 함수
     for(let i = 0; colorCopy.length > 0; i += 1) {
@@ -32,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function onClickCard() {  //카드가 클릭했을 때 발생하는 함수? 모르겠다
+    if(!clickable || completed.includes(this) || clicked[0] === this)  return;
+     
     this.classList.toggle('flipped');
     clicked.push(this);
 
@@ -43,6 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
       completed.push(clicked[0]);
       completed.push(clicked[1]);
       clicked = [];
+      if (completed.length !== total) {
+        return;
+      }
+      setTimeout(() => {
+        alert("축하합니다!");
+        resetGame();
+      }, 300);
       return;
     }
     
@@ -50,11 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
       clicked[0].classList.remove('flipped');
       clicked[1].classList.remove('flipped');
       clicked = [];
-    }, 1000);
+    }, 500);
 
   }
 
   function startGame() {
+    clickable = false;
     shuffle();
     for(let i = 0; i < total; i += 1) { // 카드 수 만큼 돌리기
       const card = createCard(i);
@@ -71,10 +82,18 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll('.card').forEach((card) => {
         card.classList.remove('flipped');
       });
+      clickable = true;
     }, 5000);
 
   }
 
   startGame();
 
+  function resetGame() {
+    $wrapper.innerHTML = '';
+    colorCopy = colors.concat(colors);
+    shuffled = [];
+    completed = [];
+    startGame();
+  }
 });

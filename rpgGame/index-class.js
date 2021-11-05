@@ -78,10 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const { hero, monster } = this;
         hero.attack(monster);
         monster.attack(hero);
-        if (hero.hp <= 0) {
+        if (hero.hp <= 0) { // 히어로가 죽었을 때 
           this.showMessage(`${hero.lev} 레벨에서 전사. 새 주인공을 생성하세요.`);
           this.quit();
-        } else if (monster.hp <= 0) {
+        } else if (monster.hp <= 0) { // 몬스터 전사시
           this.showMessage(`몬스터를 잡아 ${monster.xp} 경험치를 얻었다.`);
           hero.getXp(monster.xp);
           this.monster = null;

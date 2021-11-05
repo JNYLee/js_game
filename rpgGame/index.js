@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (input === '3') { // 도망
         this.changeScreen('game');
         this.monster = null;
-        this.showMessage('부리나케 도망쳤다!');
+        this.showMessage(`${hero.name}은 도망쳤다!`);
         this.updateMonsterStat();
       }
     }

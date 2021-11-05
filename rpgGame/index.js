@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
     hp: 100,
     xp: 0,
     att: 10,
-    attack(monster) {
-      monster.hp -= this.att;
+    attack(monster) { 
+      monster.hp -= this.att; //thro는 attack을 가리킨다.
       this.hp -= monster.att;
     },
     heal(monster) {
-      this.hp += 20;
+      this.hp += 20; //this는 hero을 가리킨다?
       this.hp -= monster.att;
     },
   };

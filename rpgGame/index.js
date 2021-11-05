@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.hp += 20; //this는 hero을 가리킨다?
       this.hp -= monster.att;
     },
-  };
+  };//공장함수 축약
   let monster = null;
   const monsterList = [
     { name: '슬라임', hp: 25, att: 10, xp: 10 },

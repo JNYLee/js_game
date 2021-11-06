@@ -86,6 +86,63 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function open(rowIndex, cellIndex) {
+    if (data[rowIndex]?.[cellIndex] >= CODE.OPENED) return;
+    const target = $tbody.children[rowIndex]?.children[cellIndex];
+    if (!target) {
+      return;
+    }
+    const count = countMine(rowIndex, cellIndex);
+    target.textContent = count || '';
+    target.className = 'opened';
+    data[rowIndex][cellIndex] = count;
+    openCount++;
+    console.log(openCount);
+    if (openCount === row * cell - mine) {
+      const time = (new Date() - startTime) / 1000;
+      clearInterval(interval);
+      $tbody.removeEventListener('contextmenu', onRightClick);
+      $tbody.removeEventListener('click', onLeftClick);
+      setTimeout(() => {
+        alert(`승리했습니다! ${time}초가 걸렸습니다.`);
+      }, 500);
+    }
+    return count;
+  }
+  
+  function openAround(rI, cI) {
+    setTimeout(() => {
+      const count = open(rI, cI);
+      if (count === 0) {
+        openAround(rI - 1, cI - 1);
+        openAround(rI - 1, cI);
+        openAround(rI - 1, cI + 1);
+        openAround(rI, cI - 1);
+        openAround(rI, cI + 1);
+        openAround(rI + 1, cI - 1);
+        openAround(rI + 1, cI);
+        openAround(rI + 1, cI + 1);
+      }
+    }, 0);
+  }
+  
+  function onLeftClick(event) {
+    const target = event.target; // td 태그겠죠?
+    const rowIndex = target.parentNode.rowIndex;
+    const cellIndex = target.cellIndex;
+    const cellData = data[rowIndex][cellIndex];
+    if (cellData === CODE.NORMAL) { // 닫힌 칸이면
+      openAround(rowIndex, cellIndex);
+    } else if (cellData === CODE.MINE) { // 지뢰 칸이면
+      target.textContent = '펑';
+      target.className = 'opened';
+      clearInterval(interval);
+      $tbody.removeEventListener('contextmenu', onRightClick);
+      $tbody.removeEventListener('click', onLeftClick);
+    } // 나머지는 무시
+    // 아무 동작도 안 함
+  }
+
   function drawTable() {
     data = plantMine();
     data.forEach((row) => {
@@ -102,5 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
       $tbody.addEventListener("click", onLeftClick);
     });
   }
+
   drawTable();
 });

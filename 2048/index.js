@@ -53,4 +53,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   startGame();
+
+  window.addEventListener('keyup', (event) => {
+    if (event.key === 'ArrowUp') {
+      moveCells('up');
+    } else if (event.key === 'ArrowDown') {
+      moveCells('down');
+    } else if (event.key === 'ArrowLeft') {
+      moveCells('left');
+    } else if (event.key === 'ArrowRight') {
+      moveCells('right');
+    }
+  });
+
+  let startCoord;
+  window.addEventListener('mousedown', (event) => {
+    startCoord = [event.clientX, event.clientY];
+  });
+  window.addEventListener('mouseup', (event) => {
+    const endCoord = [event.clientX, event.clientY];
+    const diffX = endCoord[0] - startCoord[0];
+    const diffY = endCoord[1] - startCoord[1];
+    if (diffX < 0 && Math.abs(diffX) > Math.abs(diffY)) {
+      moveCells('left');
+    } else if (diffX > 0 && Math.abs(diffX) > Math.abs(diffY)) {
+      moveCells('right');
+    } else if (diffY > 0 && Math.abs(diffX) <= Math.abs(diffY)) {
+      moveCells('down');
+    } else if (diffY < 0 && Math.abs(diffX) <= Math.abs(diffY)) {
+      moveCells('up');
+    } 
+  });
+  
 });

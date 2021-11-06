@@ -14,9 +14,27 @@ document.addEventListener("DOMContentLoaded", () => {
     if (started) return; // 이미 시작했으면 무시
     started = true;
     console.log('시작');
+    const timerId = setInterval(() => {
+      time = (time * 10 - 1) / 10; // 소수점 계산 시 문제있음
+      $timer.textContent = time;
+      if (time === 0) {
+        clearInterval(timerId);
+        clearInterval(tickId);
+        setTimeout(() => {
+          alert(`게임 오버! 점수는${score}점`);
+        }, 50);
+      }
+    }, 100);
+    const tickId = setInterval(tick, 1000);
     tick();
   });
 
+  // 화면: hidden
+  // 호출스택:
+  // 백그라운드 : interval(tick, 1000)
+  // 태스크큐:
+  let gopherPercent = 0.3;
+  let bombPercent = 0.5;
   function tick() {
     holes.forEach((hole, index) => {
       if (hole) return; // 무언가 일어나고 있으면 return
@@ -39,4 +57,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  $$cells.forEach(($cell, index) => {
+    $cell.querySelector('.gopher').addEventListener('click', (event) => {
+      if (!event.target.classList.contains('dead')) {
+        score += 1;
+        $score.textContent = score;
+      }
+      event.target.classList.add('dead');
+      event.target.classList.add('hidden');
+      clearTimeout(holes[index]); // 기존 내려가는 타이머 제거
+      setTimeout(() => {
+        holes[index] = 0;
+        event.target.classList.remove('dead');
+      }, 1000);
+    });
+    $cell.querySelector('.bomb').addEventListener('click', (event) => {
+        event.target.classList.add('boom');
+        event.target.classList.add('hidden');
+        clearTimeout(holes[index]); // 기존 내려가는 타이머 제거
+        setTimeout(() => {
+          holes[index] = 0;
+          event.target.classList.remove('boom');
+        }, 1000);
+      });
+    });
 });

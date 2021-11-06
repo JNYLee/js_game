@@ -1,7 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   const $table = document.getElementById("table");
   const $score = document.getElementById("score");
+  const $back = document.getElementById("back");
   let data = [];
+  const history = [];
+
+  $back.addEventListener("click", () => {
+    const prevData = history.pop();
+    if (!prevData) return; // 되돌릴 게 없으면 종료
+    $score.textContent = prevData.score;
+    data = prevData.table;
+    draw();
+  });
 
   // $table -> $fragment -> $tr -> $td
   function startGame() {
@@ -62,6 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // ];
   // draw();
   function moveCells(direction) {
+    history.push({
+      table: JSON.parse(JSON.stringify(data)),
+      score: $score.textContent,
+    });
     switch (direction) {
       case "left": {
         const newData = [[], [], [], []];

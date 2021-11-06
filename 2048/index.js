@@ -54,13 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   startGame();
 
-  data = [
-    [0, 2, 4, 2],
-    [0, 0, 8, ],
-    [2, 2, 2, 2],
-    [0, 16, 0, 4],
-  ];
-  draw();
+  // data = [
+  //   [32, 2, 4, 2],
+  //   [64, 4, 8, 4],
+  //   [2, 1024, 1024, 32],
+  //   [32, 16, 64, 4],
+  // ];
+  // draw();
   function moveCells(direction) {
     switch (direction) {
       case "left": {

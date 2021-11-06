@@ -1,10 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   const $tbody = document.querySelector("#table tbody");
   const $result = document.querySelector("#result");
+    
+  let data;
+  let openCount = 0;
+  let startTime;
+  let interval;
 
   const row = 10;
   const cell = 10;
   const mine = 10;
+  
   const CODE = {
     NORMAL: -1, // 닫힌 칸(지뢰 없음)
     QUESTION: -2,
@@ -14,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
     MINE: -6,
     OPENED: 0, // 0 이상이면 다모두 열린 칸
   };
-  let data;
 
   function plantMine() {
     const candidate = Array(row * cell)
@@ -86,6 +91,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function countMine(rowIndex, cellIndex) {
+    const mines = [CODE.MINE, CODE.QUESTION_MINE, CODE.FLAG_MINE];
+    let i = 0;
+    mines.includes(data[rowIndex - 1]?.[cellIndex - 1]) && i++;
+    mines.includes(data[rowIndex - 1]?.[cellIndex]) && i++;
+    mines.includes(data[rowIndex - 1]?.[cellIndex + 1]) && i++;
+    mines.includes(data[rowIndex][cellIndex - 1]) && i++;
+    mines.includes(data[rowIndex][cellIndex + 1]) && i++;
+    mines.includes(data[rowIndex + 1]?.[cellIndex - 1]) && i++;
+    mines.includes(data[rowIndex + 1]?.[cellIndex]) && i++;
+    mines.includes(data[rowIndex + 1]?.[cellIndex + 1]) && i++;
+    return i;
+  }
+  
   function open(rowIndex, cellIndex) {
     if (data[rowIndex]?.[cellIndex] >= CODE.OPENED) return;
     const target = $tbody.children[rowIndex]?.children[cellIndex];
@@ -93,24 +112,24 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     const count = countMine(rowIndex, cellIndex);
-    target.textContent = count || '';
-    target.className = 'opened';
+    target.textContent = count || "";
+    target.className = "opened";
     data[rowIndex][cellIndex] = count;
     openCount++;
     console.log(openCount);
     if (openCount === row * cell - mine) {
       const time = (new Date() - startTime) / 1000;
       clearInterval(interval);
-      $tbody.removeEventListener('contextmenu', onRightClick);
-      $tbody.removeEventListener('click', onLeftClick);
+      $tbody.removeEventListener("contextmenu", onRightClick);
+      $tbody.removeEventListener("click", onLeftClick);
       setTimeout(() => {
         alert(`승리했습니다! ${time}초가 걸렸습니다.`);
       }, 500);
     }
     return count;
   }
-  
-  function openAround(rI, cI) {
+
+  function openAround(rI, cI) { //호출스택의 overflow 안생기도록 재귀함수+
     setTimeout(() => {
       const count = open(rI, cI);
       if (count === 0) {
@@ -125,20 +144,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }, 0);
   }
-  
+
   function onLeftClick(event) {
     const target = event.target; // td 태그겠죠?
     const rowIndex = target.parentNode.rowIndex;
     const cellIndex = target.cellIndex;
     const cellData = data[rowIndex][cellIndex];
-    if (cellData === CODE.NORMAL) { // 닫힌 칸이면
+    if (cellData === CODE.NORMAL) {
+      // 닫힌 칸이면
       openAround(rowIndex, cellIndex);
-    } else if (cellData === CODE.MINE) { // 지뢰 칸이면
-      target.textContent = '펑';
-      target.className = 'opened';
+    } else if (cellData === CODE.MINE) {
+      // 지뢰 칸이면
+      target.textContent = "펑";
+      target.className = "opened";
       clearInterval(interval);
-      $tbody.removeEventListener('contextmenu', onRightClick);
-      $tbody.removeEventListener('click', onLeftClick);
+      $tbody.removeEventListener("contextmenu", onRightClick);
+      $tbody.removeEventListener("click", onLeftClick);
     } // 나머지는 무시
     // 아무 동작도 안 함
   }

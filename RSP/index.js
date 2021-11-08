@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (myScore === 3) {
         $score.textContent = `나의 승리 ${myScore}:${comScore}`;
-      } else if (computer === 3) {
+      } else if (comScore === 3) {
         $score.textContent = `컴퓨터의 승리 ${myScore}:${comScore}`;
       } else {
         $score.textContent = `${message} ${myScore}:${comScore}`;

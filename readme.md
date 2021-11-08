@@ -1,5 +1,5 @@
 # js game
 
-- [RSP]("./RSP")
+- [RSP](./RSP)
   - 기능: 
   - 스킬:

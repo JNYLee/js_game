@@ -1,12 +1,18 @@
-const $computer = document.querySelector("#computer");
-const $score = document.querySelector("#score");
+const IMG_URL = "./rsp.png"; // 이미지 로딩을 끊기 위해 잠시 . 을  붙임.
 const $rock = document.querySelector("#rock");
-const $scissors = document.querySelector("#scissors");
+const $score = document.querySelector("#score");
 const $paper = document.querySelector("#paper");
-const IMG_URL = "./rsp.png";
+const $computer = document.querySelector("#computer");
+const $scissors = document.querySelector("#scissors");
 
+$computer.style.backgroundSize = "auto 200px";
+$computer.style.background = `url(${IMG_URL}) -464px 0`;
+
+let intervalId; // 0.05초마다 사진 바꿔주기
 let myScore = 0;
 let comScore = 0;
+let clickable = true;
+let computerChoice = "scissors";
 
 const RSP_AIS_X = {
   scissors: "0", // 가위
@@ -18,6 +24,21 @@ const computerChangeChoice = {
     scissors: 'rock',
     rock: 'paper',
     paper: 'scissors'
+};
+
+const scoreTable = {
+  rock: 0,
+  scissors: 1,
+  paper: -1,
+};
+
+const changeComputerHand = () => {
+  computerChoice = computerChangeChoice[computerChoice];
+      // test print computer change choice
+      // console.log(computerFirstChoice);
+  //RSP_AIS_X.computerChoice는 안됨. 이뜻은 RSP_AIS_X.["computerChoice"] 인데 이 값은 이미 가위바위보 3개만 지정되어있음.
+  $computer.style.background = `url(${IMG_URL}) ${RSP_AIS_X[computerChoice]} 0`;
+  $computer.style.backgroundSize = `auto 200px`;
 };
 
 function checkMatchResult(diffChoiceKey) {
@@ -32,38 +53,8 @@ function checkMatchResult(diffChoiceKey) {
       }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  $computer.style.background = `url(${IMG_URL}) -464px 0`;
-  $computer.style.backgroundSize = "auto 200px";
+function clickButtonOperate(event){
   
-  let computerChoice = "scissors";
-  
-  const changeComputerHand = () => {
-    computerChoice = computerChangeChoice[computerChoice];
-        // test print computer change choice
-        // console.log(computerFirstChoice);
-    //RSP_AIS_X.computerChoice는 안됨. 이뜻은 RSP_AIS_X.["computerChoice"] 인데 이 값은 이미 가위바위보 3개만 지정되어있음.
-    $computer.style.background = `url(${IMG_URL}) ${RSP_AIS_X[computerChoice]} 0`;
-    $computer.style.backgroundSize = `auto 200px`;
-  };
-  
-  //0.05초마다 사진 바꿔주기
-  let intervalId = setInterval(changeComputerHand, 50);
-
-  const scoreTable = {
-    rock: 0,
-    scissors: 1,
-    paper: -1,
-  };
-
-  // clickButton 5번 호출, 인터벌 1번, 2번, 3번, 4번, 5번(얘만 intervalId)
-  //  그 다음에 버튼을 클릭하면 5번만 취소
-  let clickable = true;
-  let computer = 0;
-  let me = 0;
-
-  const clickButton = (event) => {
     if (clickable) {
       clearInterval(intervalId);
       clickable = false;
@@ -82,23 +73,30 @@ document.addEventListener("DOMContentLoaded", () => {
       // 2, -1은 승리조건이고, -2, 1은 패배조건, 점수표 참고
       message = checkMatchResult(diff);
       
-
-      if (myScore === 3) {
-        $score.textContent = `나의 승리 ${myScore}:${comScore}`;
-      } else if (comScore === 3) {
-        $score.textContent = `컴퓨터의 승리 ${myScore}:${comScore}`;
-      } else {
-        $score.textContent = `${message} ${myScore}:${comScore}`;
-
-        setTimeout(() => {
-          clickable = true;
-          intervalId = setInterval(changeComputerHand, 50);
-        }, 1000);
-      }
+      printScoreNowOrWinner(message);
     } // if-clickable true 조건문 종료
-  }; // clickButton-event 종료
+}// clickButtonOperate 함수 종료
 
-  $rock.addEventListener('click', clickButton);
-  $scissors.addEventListener('click', clickButton);
-  $paper.addEventListener('click', clickButton);
+function printScoreNowOrWinner(message) {
+  if (myScore === 3) {
+    $score.textContent = `나의 승리 ${myScore}:${comScore}`;
+  } else if (comScore === 3) {
+    $score.textContent = `컴퓨터의 승리 ${myScore}:${comScore}`;
+  } else {
+    $score.textContent = `${message} ${myScore}:${comScore}`;
+    setTimeout(() => {
+      clickable = true;
+      intervalId = setInterval(changeComputerHand, 50);
+    }, 1000);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // 매 0.5초마다 컴퓨터 손 바꿔주기
+  intervalId =  setInterval(changeComputerHand, 50); 
+
+  $rock.addEventListener('click', clickButtonOperate);
+  $scissors.addEventListener('click', clickButtonOperate);
+  $paper.addEventListener('click', clickButtonOperate);
 });

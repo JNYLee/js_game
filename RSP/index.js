@@ -5,9 +5,6 @@ const $paper = document.querySelector("#paper");
 const $computer = document.querySelector("#computer");
 const $scissors = document.querySelector("#scissors");
 
-$computer.style.backgroundSize = "auto 200px";
-$computer.style.background = `url(${IMG_URL}) -464px 0`;
-
 let intervalId; // 0.05초마다 사진 바꿔주기
 let myScore = 0;
 let comScore = 0;

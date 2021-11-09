@@ -1,6 +1,6 @@
 # **R**ock, **S**cissors, **P**aper!
 
-- ## [ROCK SCISSORS PAPER GAME](./RSP)
+- ## [ROCK SCISSORS PAPER GAME](./index.js)
     <br></br>
   - >### **기능 소개**
     - >#### 1. 컴퓨터와 매 **1초 마다** 경기를 치룰 수 있다.

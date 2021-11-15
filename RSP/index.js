@@ -1,99 +1,134 @@
-const IMG_URL = "./rsp.png"; // 이미지 로딩을 끊기 위해 잠시 . 을  붙임.
-const $rock = document.querySelector("#rock");
-const $score = document.querySelector("#score");
-const $paper = document.querySelector("#paper");
-const $computer = document.querySelector("#computer");
-const $scissors = document.querySelector("#scissors");
+document.addEventListener("DOMContentLoaded", () => {
+  const RSP_AIS_X = {
+    scissors: "0", // 가위
+    rock: "-232px", // 바위
+    paper: "-440px", // 보
+  };
 
-let intervalId; // 0.05초마다 사진 바꿔주기
-let myScore = 0;
-let comScore = 0;
-let clickable = true;
-let computerChoice = "scissors";
+  const RSP_STATUS = {
+    바위: "rock",
+    가위: "scissors",
+    보: "paper",
+  };
 
-const RSP_AIS_X = {
-  scissors: "0", // 가위
-  rock: "-220px", // 바위
-  paper: "-440px", // 보
-};
+  const SCORE_TABLE = {
+    rock: 0,
+    scissors: 1,
+    paper: -1,
+  };
 
-const computerChangeChoice = {
-    scissors: 'rock',
-    rock: 'paper',
-    paper: 'scissors'
-};
+  const COM_CHANGE_CHOICE = {
+    scissors: "rock",
+    rock: "paper",
+    paper: "scissors",
+  };
 
-const scoreTable = {
-  rock: 0,
-  scissors: 1,
-  paper: -1,
-};
+  const MAX_GAME_COUNT = 3;
+  const WIN = 1;
+  const LOSE = -1;
+  const DRAW = 0;
 
-const changeComputerHand = () => {
-  computerChoice = computerChangeChoice[computerChoice];
-      // test print computer change choice
-      // console.log(computerFirstChoice);
-  //RSP_AIS_X.computerChoice는 안됨. 이뜻은 RSP_AIS_X.["computerChoice"] 인데 이 값은 이미 가위바위보 3개만 지정되어있음.
-  $computer.style.background = `url(${IMG_URL}) ${RSP_AIS_X[computerChoice]} 0`;
-  $computer.style.backgroundSize = `auto 200px`;
-};
+  const $rock = document.querySelector("#rock");
+  const $score = document.querySelector("#score");
+  const $paper = document.querySelector("#paper");
+  const $computer = document.querySelector("#computer-rsp-image");
+  const $scissors = document.querySelector("#scissors");
+  const $rspSpace = document.querySelector("#rsp-space");
 
-function checkMatchResult(diffChoiceKey) {
-    if ([2, -1].includes(diffChoiceKey)) {
-        myScore += 1;
-        return '승리';
-      } else if ([-2, 1].includes(diffChoiceKey)) {
-        comScore += 1;
-        return '패배';
-      } else {
-        return '무승부';
-      }
-}
+  const RSP_IMG_URL = "./rsp.png";
+  let intervalId;
+  let myScore = 0;
+  let comScore = 0;
+  let clickable = true;
+  let computerChoice = "scissors";
 
-function clickButtonOperate(event){
-  
+  const changeComputerHand = () => {
+    computerChoice = COM_CHANGE_CHOICE[computerChoice];
+    $computer.style.background = `url(${RSP_IMG_URL}) ${RSP_AIS_X[computerChoice]} 0px`;
+    $computer.style.backgroundSize = `auto 200px`;
+  };
+
+  const showUserHand = (event) => {
+    $rspSpace.style.visibility = "visible";
+    console.log(RSP_AIS_X[RSP_STATUS[event.target.textContent]]);
+    $rspSpace.style.background = `url(${RSP_IMG_URL}) ${
+      RSP_AIS_X[RSP_STATUS[event.target.textContent]]
+    } 0px`;
+    $rspSpace.style.backgroundSize = `auto 200px`;
+  };
+
+  const intervalChangeComputerHand = () => {
+    return setInterval(changeComputerHand, 50);
+  };
+
+  const checkComMatchResult = (diffScore) => {
+    if ([2, -1].includes(diffScore)) {
+      return WIN;
+    } else if ([-2, 1].includes(diffScore)) {
+      return LOSE;
+    } else {
+      return DRAW;
+    }
+  };
+
+  const isFinishGame = () => {
+    return myScore === MAX_GAME_COUNT || comScore === MAX_GAME_COUNT;
+  };
+
+  const printResultMessage = (message) => {
+    if (myScore === MAX_GAME_COUNT) {
+      return `[게임 종료] 나의 승리 ${myScore}:${comScore}`;
+    } else if (comScore === MAX_GAME_COUNT) {
+      return `[게임 종료] 컴퓨터의 승리 ${myScore}:${comScore}`;
+    } else {
+      return `${message} ${myScore}:${comScore}`;
+    }
+  };
+
+  const clickButtonOperate = (event) => {
     if (clickable) {
       clearInterval(intervalId);
       clickable = false;
-      // 점수 계산 및 화면 표시
-      const myChoice = event.target.textContent === '바위' 
-        ? 'rock' 
-        : event.target.textContent === '가위' 
-          ? 'scissors' 
-          : 'paper';
-      
-      const myChoiceKey = scoreTable[myChoice];
-      const computerChoiceKey = scoreTable[computerChoice];
-      const diff = myChoiceKey - computerChoiceKey;
 
-      let message;
-      // 2, -1은 승리조건이고, -2, 1은 패배조건, 점수표 참고
-      message = checkMatchResult(diff);
-      
-      printScoreNowOrWinner(message);
-    } // if-clickable true 조건문 종료
-}// clickButtonOperate 함수 종료
+      showUserHand(event);
 
-function printScoreNowOrWinner(message) {
-  if (myScore === 3) {
-    $score.textContent = `나의 승리 ${myScore}:${comScore}`;
-  } else if (comScore === 3) {
-    $score.textContent = `컴퓨터의 승리 ${myScore}:${comScore}`;
-  } else {
-    $score.textContent = `${message} ${myScore}:${comScore}`;
-    setTimeout(() => {
-      clickable = true;
-      intervalId = setInterval(changeComputerHand, 50);
-    }, 1000);
+      const myChoice = RSP_STATUS[event.target.textContent];
+      const diffScore = SCORE_TABLE[myChoice] - SCORE_TABLE[computerChoice];
+      const matchResult = checkComMatchResult(diffScore);
+
+      let message = "";
+
+      if (matchResult === WIN) {
+        myScore += 1;
+        message = "승리";
+      } else if (matchResult === LOSE) {
+        comScore += 1;
+        message = "패배";
+      } else if (matchResult === DRAW) {
+        message = "무승부";
+      }
+
+      if (!isFinishGame()) {
+        setTimeout(() => {
+          clickable = true;
+          intervalId = intervalChangeComputerHand();
+          $rspSpace.style.visibility = "hidden";
+        }, 1000);
+      }
+
+      $score.textContent = printResultMessage(message);
+    }
+  };
+
+  intervalId = intervalChangeComputerHand();
+
+  $rock.addEventListener("click", clickButtonOperate);
+  $scissors.addEventListener("click", clickButtonOperate);
+  $paper.addEventListener("click", clickButtonOperate);
+
+  const $stop = document.querySelector("#stop");
+  $stop.addEventListener("click", stopppp);
+  function stopppp() {
+    clearInterval(intervalId);
   }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  // 매 0.5초마다 컴퓨터 손 바꿔주기
-  intervalId =  setInterval(changeComputerHand, 50); 
-
-  $rock.addEventListener('click', clickButtonOperate);
-  $scissors.addEventListener('click', clickButtonOperate);
-  $paper.addEventListener('click', clickButtonOperate);
 });

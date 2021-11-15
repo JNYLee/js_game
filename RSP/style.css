@@ -1,4 +1,31 @@
-#computer {
-    width: 142px;
-    height: 200px;
-  }
+#alert-game {
+  border: 5px solid;
+}
+#rsp-wrap {
+  position: relative;
+}
+#computer-rsp-image {
+  position: absolute;
+  width: 165px;
+  height: 200px;
+  display: inline-block;
+}
+
+.user-space {
+  position: relative;
+  display: inline-block;
+  width: 155px;
+  height: 200px;
+}
+
+.show-question {
+  background-image: url(question_mark.png);
+  background-size: auto 200px;
+}
+
+#rsp-space {
+  position: relative;
+  display: inline-block;
+  width: 155px;
+  height: 200px;
+}

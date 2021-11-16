@@ -35,8 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const $rspSpace = document.querySelector("#rsp-space");
   const $userScore = document.querySelector("#user-score");
   const $comScore = document.querySelector("#computer-score");
-  // const $end = document.querySelector("#end");
-  //const $restart = document.querySelector("#restart");
   const $alertGame = document.querySelector("#alert-game");
 
   const RSP_IMG_URL = "./rsp_sprite.png";
@@ -105,26 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // checkOperateSystemButton = (event) => {
-  //   if (event.target.textContent === "종료") {
-  //     clearInterval(intervalId);
-  //   } else if (event.target.textContent === "재시작") {
-  //     count = 0;
-  //     userScore = 0;
-  //     comScore = 0;
-  //     clearInterval(intervalId);
-  //     intervalId = intervalChangeComputerHand();
-  //   }
-  // };
-
   const clickButtonOperate = (event) => {
     if (clickable) {
       clearInterval(intervalId);
       clickable = false;
 
       showUserHand(event);
-
-      //checkOperateSystemButton(event);
 
       const userChoice = RSP_STATUS[event.target.textContent];
       const diffScore = SCORE_TABLE[userChoice] - SCORE_TABLE[computerChoice];
@@ -159,6 +143,4 @@ document.addEventListener("DOMContentLoaded", () => {
   $rock.addEventListener("click", clickButtonOperate);
   $scissors.addEventListener("click", clickButtonOperate);
   $paper.addEventListener("click", clickButtonOperate);
-  //$end.addEventListener("click", clickButtonOperate);
-  //$restart.addEventListener("click", clickButtonOperate);
 });

@@ -1,31 +1,106 @@
-#alert-game {
-  border: 5px solid;
+#game-table {
+  border: solid 1px;
+  width: 330px;
+  height: 300px;
 }
+
+#alert-game {
+  position: relative;
+  border: 5px solid;
+  text-align: center;
+}
+
+#score-board {
+  position: relative;
+  width: 330px;
+  height: 56px;
+}
+
+.score-blue {
+  font-size: 42px;
+  position: relative;
+  left: 0%;
+  transform: translateX(0%);
+  color: blue;
+  margin-right: 5px;
+}
+
+.score-red {
+  font-size: 42px;
+  position: relative;
+  left: 4%;
+  transform: translateX(0%);
+  color: red;
+  margin-left: 5px;
+}
+
+#score-bar {
+  font-size: 42px;
+  margin-left: 10px;
+}
+
 #rsp-wrap {
   position: relative;
-}
-#computer-rsp-image {
-  position: absolute;
-  width: 165px;
-  height: 200px;
-  display: inline-block;
 }
 
 .user-space {
   position: relative;
   display: inline-block;
-  width: 155px;
-  height: 200px;
+  width: 165px;
+  height: 106px;
 }
 
 .show-question {
   background-image: url(question_mark.png);
-  background-size: auto 200px;
+  background-size: 82px 106px;
 }
 
 #rsp-space {
   position: relative;
   display: inline-block;
-  width: 155px;
-  height: 200px;
+  width: 165px;
+  height: 106px;
+  transform: rotate(180deg);
+  transform: scaleX(-1);
+}
+
+#computer-rsp-image {
+  position: absolute;
+  width: 165px;
+  height: 106px;
+  display: inline-block;
+}
+#button-wrap {
+  position: relative;
+  height: 24px;
+  width: 330px;
+}
+.btn {
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  float: left;
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,
+    rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
+    rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+#scissors {
+  float: left;
+}
+
+#rock {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+#paper {
+  float: right;
+}
+
+#stop {
+  position: fixed;
+  top: 400px;
+  left: 300px;
 }

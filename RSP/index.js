@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const RSP_AIS_X = {
-    scissors: "0", // 가위
-    rock: "-232px", // 바위
-    paper: "-440px", // 보
+    scissors: "104px", // 가위
+    rock: "0px", // 바위
+    paper: "-116px", // 보
   };
 
   const RSP_STATUS = {
@@ -29,32 +29,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const DRAW = 0;
 
   const $rock = document.querySelector("#rock");
-  const $score = document.querySelector("#score");
   const $paper = document.querySelector("#paper");
   const $computer = document.querySelector("#computer-rsp-image");
   const $scissors = document.querySelector("#scissors");
   const $rspSpace = document.querySelector("#rsp-space");
+  const $userScore = document.querySelector("#user-score");
+  const $comScore = document.querySelector("#computer-score");
+  const $alertGame = document.querySelector("#alert-game");
 
-  const RSP_IMG_URL = "./rsp.png";
+  const RSP_IMG_URL = "./rsp_sprite.png";
   let intervalId;
-  let myScore = 0;
+  let userScore = 0;
   let comScore = 0;
   let clickable = true;
   let computerChoice = "scissors";
+  let count = 0;
 
   const changeComputerHand = () => {
     computerChoice = COM_CHANGE_CHOICE[computerChoice];
-    $computer.style.background = `url(${RSP_IMG_URL}) ${RSP_AIS_X[computerChoice]} 0px`;
-    $computer.style.backgroundSize = `auto 200px`;
+    $computer.style.background = `url(${RSP_IMG_URL}) 0px ${RSP_AIS_X[computerChoice]}`;
+    $computer.style.backgroundSize = `166px 332px`;
   };
 
   const showUserHand = (event) => {
     $rspSpace.style.visibility = "visible";
     console.log(RSP_AIS_X[RSP_STATUS[event.target.textContent]]);
-    $rspSpace.style.background = `url(${RSP_IMG_URL}) ${
+    $rspSpace.style.background = `url(${RSP_IMG_URL}) 0px ${
       RSP_AIS_X[RSP_STATUS[event.target.textContent]]
-    } 0px`;
-    $rspSpace.style.backgroundSize = `auto 200px`;
+    }`;
+    $rspSpace.style.backgroundSize = `166px 332px`;
   };
 
   const intervalChangeComputerHand = () => {
@@ -72,16 +75,31 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const isFinishGame = () => {
-    return myScore === MAX_GAME_COUNT || comScore === MAX_GAME_COUNT;
+    return userScore === MAX_GAME_COUNT || comScore === MAX_GAME_COUNT;
   };
 
-  const printResultMessage = (message) => {
-    if (myScore === MAX_GAME_COUNT) {
-      return `[게임 종료] 나의 승리 ${myScore}:${comScore}`;
+  const printGamingResult = (gameMessage) => {
+    $alertGame.textContent = gameMessage;
+    $userScore.textContent = userScore;
+    $comScore.textContent = comScore;
+  };
+
+  const waitScreen = () => {
+    clickable = true;
+    intervalId = intervalChangeComputerHand();
+    $rspSpace.style.visibility = "hidden";
+    $alertGame.textContent = "가위바위보 게임";
+  };
+
+  const printResultMessage = () => {
+    if (userScore === MAX_GAME_COUNT) {
+      printGamingResult("[게임 종료] 플레이어 승리");
+      return 0;
     } else if (comScore === MAX_GAME_COUNT) {
-      return `[게임 종료] 컴퓨터의 승리 ${myScore}:${comScore}`;
+      printGamingResult("[게임 종료] 플레이어 패배");
+      return 0;
     } else {
-      return `${message} ${myScore}:${comScore}`;
+      return 0;
     }
   };
 
@@ -92,31 +110,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
       showUserHand(event);
 
-      const myChoice = RSP_STATUS[event.target.textContent];
-      const diffScore = SCORE_TABLE[myChoice] - SCORE_TABLE[computerChoice];
+      const userChoice = RSP_STATUS[event.target.textContent];
+      const diffScore = SCORE_TABLE[userChoice] - SCORE_TABLE[computerChoice];
       const matchResult = checkComMatchResult(diffScore);
 
       let message = "";
+      count++;
 
       if (matchResult === WIN) {
-        myScore += 1;
-        message = "승리";
+        userScore += 1;
+        message = `${count}번째 판: 플레이어 승리`;
       } else if (matchResult === LOSE) {
         comScore += 1;
-        message = "패배";
+        message = `${count}번째 판: 플레이어 패배`;
       } else if (matchResult === DRAW) {
-        message = "무승부";
+        message = `${count}번째 판: 무승부`;
       }
+
+      printGamingResult(message);
+      printResultMessage();
 
       if (!isFinishGame()) {
         setTimeout(() => {
-          clickable = true;
-          intervalId = intervalChangeComputerHand();
-          $rspSpace.style.visibility = "hidden";
+          waitScreen();
         }, 1000);
       }
-
-      $score.textContent = printResultMessage(message);
     }
   };
 
@@ -125,10 +143,4 @@ document.addEventListener("DOMContentLoaded", () => {
   $rock.addEventListener("click", clickButtonOperate);
   $scissors.addEventListener("click", clickButtonOperate);
   $paper.addEventListener("click", clickButtonOperate);
-
-  const $stop = document.querySelector("#stop");
-  $stop.addEventListener("click", stopppp);
-  function stopppp() {
-    clearInterval(intervalId);
-  }
 });
